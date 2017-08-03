@@ -1,0 +1,119 @@
+<html><head><title>filter tools</title><meta charset=utf-8 /><style type="text/css">		*{			padding:0;			margin:0;		}		#main{			width:900px;			height:600px;			margin:20px auto;			position:relative;		}		#controls{			width:300px;			height:600px;			background-color:rgba(4,4,4,.7);		}		#pic{			position:absolute;			width:600px;			height:600px;			background-color:gray;			left:300px;			top:0;		}		#controls .head{			width:100%;			height:40px;			background-color:rgb(0,0,0);			line-height:40px;			font-size:20px;			font-family:'微软雅黑';			text-align:center;			color:white;		}		.control{			width:100%;			height:43px;			background-color:#eee;			margin-bottom:8px;		}		.control>.tip{			display:block;			font-size:15px;			margin:3px;			font-family:'微软雅黑';		}		.control>input{			width:97%;			height:15px;			margin:0 3px;		}		#reset{			width:100%;			height:100%;			color:white;			cursor:pointer;			font-size:20px;			background-color:black;		}	</style></head><body><div id=main><div id=controls><div class=head>控制栏</div><div class=control><span class=tip>不透明度 [ <span id=vopacity></span>]</span> <input id=opacity type=range max=100 min=0 value=100 /></div><div class=control><span class=tip>模糊 [ <span id=vblur></span>]</span> <input id=blur type=range max=100 min=0 value="0"/></div><div class=control><span class=tip>灰色 [ <span id=vgrayscale></span>]</span> <input id=grayscale type=range max=100 min=0 value="0"/></div><div class=control><span class=tip>老照片 [ <span id=vsepia></span>]</span> <input id=sepia type=range max=100 min=0 value="0"/></div><div class=control><span class=tip>饱和度 [ <span id=vsaturate></span>]</span> <input id=saturate type=range max=200 min=0 value="100"/></div><div class=control><span class=tip>色相旋转 [ <span id=vhue-rotate></span>]</span> <input id=hue-rotate type=range max=360 min=0 value="0"/></div><div class=control><span class=tip>反色 [ <span id=vinvert></span>]</span> <input id=invert type=range max=100 min=0 value="0"/></div><div class=control><span class=tip>亮度 [ <span id=vbrightness></span>]</span> <input id=brightness type=range max=200 min=0 value="100"/></div><div class=control><span class=tip>对比度 [ <span id=vcontrast></span>]</span> <input id=contrast type=range max=200 min=0 value="100"/></div><div class=control><span class=tip>阴影 [ <span id=vdrop-shadow></span>]</span> <input id=drop-shadow type=range max=100 min=0 value="0"/></div><div class=control><button id=reset>重置参数</button></div></div><div id=pic><img id="picture"/></div></div><script type="text/javascript">
+		window.onload = function(){
+			initPic('one.jpg')
+			initValue()
+			initListener()
+		}
+
+		function initPic(imageSrc){
+			var src = imageSrc
+			var pic = new Image()
+			pic.src = src
+			pic.onload = function(){
+				var img = g('picture')
+				var scaleRate = 600/pic.width
+				img.style.width = 600 + 'px'
+				img.style.height = (pic.height * scaleRate) + 'px'
+				img.style.marginTop = (300 - pic.height * scaleRate/2) + 'px'
+				img.src = src
+			}
+		}
+
+		var inputs = document.getElementsByTagName('input')
+
+		var j=0
+		var oldValue = []
+		function initValue(){
+			for(var i=0; i<inputs.length; i++){
+    var id = inputs[i].id
+    var value = inputs[i].value
+    var valueId = 'v' + id
+    g(valueId).innerHTML = value
+
+    if(j==0){
+     oldValue.push(value)
+    }
+   }
+   j=1
+  }
+
+  function initListener(){
+   for(var i=0; i<inputs.length; i++){
+    inputs[i].addEventListener('change', onChange, false)
+    inputs[i].addEventListener('mousemove', mouseMove, false)
+    inputs[i].addEventListener('mousedown', mouseDown, false)
+   }
+   document.addEventListener('mouseup', mouseUp, false)
+   //g('picture').ondragstart = function(){return false;}
+   document.getElementById('picture').addEventListener('dragstart', stopDrag, false)
+   g('reset').addEventListener('click', reset, false)
+  }
+  //function
+  function g(elId){
+   return document.getElementById(elId)
+  }
+
+  function onChange(){
+   initValue()
+   processor()
+  }
+
+  function processor(){
+   var arrValue = []
+   var arrId = []
+   for(var i=0; i<inputs.length; i++){
+    var input = inputs[i];
+    arrValue.push(input.value)
+    arrId.push(input.id)
+   }
+
+   var color = 'red'
+   if(arrValue[9] == 0){
+    color = 'white'
+   }
+   var i=0
+   var str = arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]+'px'+')'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]+'deg)'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i++]/100+')'
+     + arrId[i]+'('+arrValue[i]+'px '+arrValue[i]+'px '+arrValue[i]+'px '+color+')'
+   g('picture').style.webkitFilter = str
+  }
+
+  function reset(){
+   for(var i=0; i<inputs.length; i++){
+    inputs[i].value = oldValue[i]
+   }
+   processor()
+  }
+
+  var sureDown = false
+  function mouseMove(){
+   if(sureDown){
+    onChange()
+   }
+  }
+
+  function mouseDown () {
+    sureDown = true
+  }
+
+  function mouseUp () {
+    sureDown = false 
+  }
+
+  function stopDrag(e){
+   e = e || window.event
+   if(e.stopPropagation){
+    e.stopPropagation()
+   }
+   e.preventDefault()
+  }
+ </script>
+</body>
+</html>

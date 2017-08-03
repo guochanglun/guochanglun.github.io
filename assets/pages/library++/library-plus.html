@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library-Plus</title>
+
+    <link rel="stylesheet" href="css/project.css"/>
+</head>
+<body>
+<div class="content">
+    <header class="title-header">
+        <h1>掌上图书馆-山理工</h1>
+        <p class="title-subtitle-text">模拟登录山理工图书馆，并提供续借、搜索、收藏、美文阅读、机器人聊天等功能！</p>
+    </header>
+
+    <section class="section">
+        <h2 class="title">界面展示</h2>
+        <p class="point-text"><i class="point">精美界面</i>app提供了精美的界面（至少我看着是这样），而且小巧易用，绝不占用用户的内存空间！</p>
+        <ul class="images">
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-16-788_com.gcl.librar.jpg"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-24-754_com.gcl.librar.jpg"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-12-809_com.gcl.librar.jpg"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-44-784_com.gcl.librar.jpg"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-52-362_com.gcl.librar.jpg"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-06-59-561_com.gcl.librar.png"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-07-06-433_com.gcl.librar.png"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-07-10-735_com.gcl.librar.png"/></li>
+            <li><img src="project/library/Screenshot_2017-03-12-15-07-30-076_com.gcl.librar.png"/></li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2 class="title">技术解析</h2>
+        <p class="point-text"><i class="point">模拟登录</i>使用httpclient-android模拟登录，注意是httpclient-android。(在android api
+            23里去掉了，所以需要一些配置)</p>
+
+        <p class="point-text"><i class="point">自定义View</i>继承特定的View打造适合自己的View</p>
+
+        <p class="point-text"><i class="point">android5.0动画</i>大量使用了android5.0的动画，所以低版本的系统不能使用</p>
+
+        <p class="point-text"><i class="point">爬虫技术</i>在美文阅读模块使用爬虫爬取了一个网站的3000多篇文章</p>
+
+        <p class="point-text"><i class="point">其他</i>没有了？</p>
+    </section>
+
+    <section class="section">
+        <h2 class="title">遇到的问题</h2>
+
+        <p class="point-text"><i class="point">模拟登录</i>上面说到使用httpclient-android进行模拟登录，这是有原因的。一开始我是在eclipse上写的模拟登录的代码，成功登录到图书馆，用的httpclient。
+            但是把代码拷到Android项目中就出现异常，是android虚拟机报错。具体是什么错误我也不太清楚，是网络安全方面的。</p>
+
+        <p class="point-text"><i class="point">异常处理</i>以前也没太注意过处理异常，在这里可是上了一课。由于要进行网络请求，会抛出各种网络异常，一开始没怎么处理，捕获以后就放那了。到运行的时候才发现app太脆弱了，一言不合就闪退。我给函数添加了返回值，返回false或null，遇到异常就让函数返回，让接收者根据返回的结果作出判断。
+        </p>
+
+    </section>
+
+    <section class="section">
+
+        <h2 class="title">源码下载</h2>
+        <a class="button" href="https://github.com/guochanglun/LibraryPlus" target="_blank">github</a>
+    </section>
+
+    <footer>
+        <p>gcl出品</p>
+        <p>2017-03-12</p>
+    </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* total */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: '微软雅黑';
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+.content {
+    margin: auto;
+    width: 85%;
+}
+
+/* 标题 */
+.title-header {
+    background-color: #123456;
+    color: #fff;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.title-header h1 {
+    font-size: 3rem;
+    margin: 1rem;
+}
+
+.title-subtitle-text {
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #eee;
+}
+
+/* 章节 */
+.section {
+    background-color: #fff;
+    margin-bottom: 2.5rem;
+    padding: 2rem;
+    box-shadow: 5px 5px 10px #ddd;
+}
+
+.section .title {
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+.section .point {
+    font-style: normal;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin-right: 1em;
+    color: #fff;
+    background-color: #123456;
+    box-shadow: inset 0 0 5px #666;
+}
+
+.section .point-text {
+    font-size: 1.6rem;
+    line-height: 2;
+    margin: 1.5rem;
+    color: #444;
+}
+
+.section a.button {
+    margin: auto;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-size: 1.8rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    width: 50%;
+    background-color: #124455;
+    color: #fff;
+}
+
+.section a.button:hover {
+    cursor: pointer;
+    background-color: #123456;
+}
+
+/* 图片 */
+ul.images {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+ul.images li {
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 32%;
+}
+
+ul.images li + li {
+    margin-left: -1px;
+}
+
+ul.images li img {
+    width: 90%;
+    max-width: 350px;
+    margin-left: 15%;
+    box-shadow: 5px 5px 10px #ddd;
+}
+
+/* footer */
+footer {
+    margin: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #666;
+}
+
+footer p {
+    line-height: 2.3rem;
+}
+
+@media only screen and (max-width: 68.75em) {
+    .content {
+        width: 90%;
+    }
+
+}
+
+@media only screen and (max-width: 37.5em) {
+    .content {
+        width: 97%;
+    }
+
+    .title-header {
+        text-align: center;
+    }
+
+    .title-header h1 {
+        font-size: 2rem;
+    }
+
+    ul.images li {
+        text-decoration: none;
+        width: 90%;
+        margin-top: 2rem;
+    }
+
+}

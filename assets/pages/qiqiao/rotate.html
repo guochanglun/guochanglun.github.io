@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>rotate</title>
+</head>
+<body>
+	
+	<style type="text/css" media="screen">
+		div{width:100px; height: 100px; background-color: brown; margin: 100px auto;}	
+	</style>
+
+	<div id="ro">sdf</div>
+	
+	<script src="move.min.js"></script>
+	<script>
+		var ro = document.getElementById('ro')
+		ro.addEventListener('mousemove', function(e){
+			var x = getX(e, ro)
+			var y = getY(e, ro)
+
+			var tan = y/x
+			var re = Math.atan(tan)*180/Math.PI
+			console.log(re.toFixed(3))
+			ro.style.transform = "rotate("+re.toFixed(3)+"deg)"
+		})
+
+		function getX(e, ro){
+			return e.clientX - ro.offsetLeft - ro.offsetWidth/2
+		}
+		function getY(e, ro){
+			return e.clientY - ro.offsetTop - ro.offsetHeight/2
+		}
+	</script>
+</body>
+</html>

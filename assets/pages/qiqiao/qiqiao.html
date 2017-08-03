@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>sharp</title>
+</head>
+<body>
+	<style type="text/css" media="screen">
+		div{
+			cursor: move; 
+			display:block;
+		}
+		.rect{
+			width: 100px; 
+			height: 100px; 
+			background-color: brown;
+		}
+		.sanjr{
+			width:0;
+			height:0;   
+			border-left:200px solid #ed2c30;    
+			border-bottom:200px solid transparent; 
+		}
+
+		.sanjl{
+			width:0;
+			height:0;   
+			border-right:100px solid #1195df;    
+			border-bottom:100px solid transparent; 
+		}
+		.sanjc{
+			width:0;
+			height:0;   
+			border-right:100px solid transparent;    
+			border-left:100px solid transparent;
+			border-bottom:100px solid #ecb483; 
+		}
+		.pxst{
+			width:0;
+			height:0;   
+			border-left:100px solid transparent;    
+			border-bottom:100px solid #c8ee74; 
+		}
+		.pxsb{
+			width:0;
+			height:0;   
+			border-left:100px solid #c8ee74;    
+			border-bottom:100px solid transparent; 
+		}
+
+		.picl{
+		 	height: 100px;
+		 	border-right: 100px solid #fb561e;
+		 	border-bottom: 100px solid transparent;
+		}
+
+		.picb{
+			height: 0;
+			width: 100px;
+			border-bottom: 100px solid #fce330;
+			border-left: 100px solid transparent;
+			border-right: 100px solid transparent;
+		}
+		.active{
+			-webkit-animation: "opa" .7s infinite ease alternate;
+		}
+
+		@-webkit-keyframes opa{
+			
+			from {
+				opacity: 1;
+			}
+
+			to{
+				opacity: 0.5;
+			}
+		}
+
+		.rotate{
+			position:absolute;
+			width: 98%;
+			z-index:0;
+			background-color: #444;
+			border-radius: 15px;
+			padding: 10px;
+			bottom: 20px;
+			color: white;
+			font-family: '微软雅黑';
+		}
+		
+		.rotate input{
+			width: 100%;
+			margin-top: 10px;
+		}
+	
+		.rotate a{
+			color: #fff;
+			margin-right: 20px;
+		}
+		.rotate a:active{
+			color: #777;
+		}
+		.rotate .left{
+			margin-left: 50px;
+		}
+	</style>
+	
+	<form class="rotate" onsubmit="retrun false">
+		<fieldset>
+			<legend>选项</legend>
+			<label>调正选中元素的角度</label><span>[<span id="rotateVal">0</span>]</span> 
+			<label class="left">微调：</label> 
+			<a href="#" id="add">加一度[快捷键A]</a>
+			<a href="#" id="sub">减一度[快捷键D]</a>
+			<label class="left">快速使用：双击选中，选中后可旋转，↑←↓→轻微移动，再次双击取消选中</label> <br />
+			<input type="range" max="360" min="0" value="0" id="rotate"/>
+		</fieldset>
+	</form>
+	
+	<div class="rect" id="rect"></div>
+	
+	<div class="sanjr" id="sanjr"></div>		
+
+	<div class="sanjl" id="sanjl"></div>
+
+	<div class="sanjc" id="sanjc"></div>
+
+	<div id="pxs">
+		<div class="pxst"></div>
+		<div class="pxsb"></div>
+	</div>
+
+	<div class="picb" id="picb"></div>
+
+	<div class="picl" id="picl"></div>
+
+	<script src="newDrag.js"></script>
+	<script>
+		var rect = new Drag()
+		rect.init('rect', 'rect', 800)
+
+		var sanjr = new Drag()
+		sanjr.init('sanjr', 'sanjr')
+
+		var sanjl  = new Drag()
+		sanjl.init('sanjl', 'sanjl', 900)
+
+		var sanjc  = new Drag()
+		sanjc.init('sanjc', 'sanjc', 700)
+
+		var pxs  = new Drag()
+		pxs.init('pxs', 'pxs', 600)
+
+		var picb  = new Drag()
+		picb.init('picb', 'picb', 400)
+
+		var picl  = new Drag()
+		picl.init('picl', 'picl', 500)
+
+
+		//全局变量
+		var selected = null
+		var rotate = document.getElementById('rotate')
+		var pxs = document.getElementById('pxs')
+		var rotateVal = document.getElementById('rotateVal')
+		var add = document.getElementById('add')
+		var sub = document.getElementById('sub')
+
+		//添加事件
+		var divs = document.querySelectorAll("div[class]")
+		for(var i=0; i<divs.length; i++){
+			divs[i].addEventListener("dblclick", function(e){
+				var target = e.target
+				if(target.classList.contains('pxst') || target.classList.contains('pxsb')){
+						target = target.parentNode
+				}
+
+				if(target.classList.contains('active')){
+					target.classList.remove('active')
+					selected = null
+				}else{
+					var selecteds = document.querySelectorAll(".active")
+					for(var i=0; i<selecteds.length; i++){
+						selecteds[i].classList.remove("active")
+					}
+					target.classList.add('active')
+					selected = target
+					console.log(selected)
+
+					//设置input的值
+					var val = parseInt(target.style.transform.substr(7))
+					if(isNaN(val)) {
+						rotateVal.innerHTML = 0
+						rotate.value = 0
+						return
+					}
+					rotateVal.innerHTML = val
+					rotate.value = val
+				}
+			})
+		}
+
+		//添加按键微调事件
+		document.addEventListener("keydown", function(e){
+
+			if(selected == null) return 
+
+			var code = e.keyCode
+
+			console.log(selected)
+			switch (code) {		
+				case 38:
+					// up
+					var offsettop = selected.offsetTop
+					if(offsettop-10 < 0) return
+					selected.style.top = (offsettop-2) + 'px'
+					break;
+				case 40:
+					// down
+					var offsettop = selected.offsetTop
+					//if(offsettop+selected.offsetHeight > document.body.clientHeight) return
+					selected.style.top = (offsettop+2) + 'px'
+					break;
+				case 37:
+					// left
+					var offsetLeft = selected.offsetLeft
+					if(offsetLeft-10 < 0) return
+					selected.style.left = (offsetLeft-2) + 'px'
+					break;
+				case 39:
+					// right
+					var offsetLeft = selected.offsetLeft
+					if(offsetLeft+selected.offsetWidth > document.body.clientWidth) return
+					selected.style.left = (offsetLeft+2) + 'px'
+					break;
+				case 65:
+					addMic();
+					break;
+				case 68:
+					subMic();
+					break;
+				default:
+					//console.log(code) 
+					break;
+			}
+		})
+		
+		//控制转动
+		rotate.addEventListener('change', function(e){
+			if(selected == null) return;
+
+			var val = e.target.value
+			rotateVal.innerHTML = val
+			selected.style.transformOrigin= "50% 50%"
+			selected.style.transform = "rotate("+val+"deg)"
+		})
+
+		//微增
+		add.addEventListener("click", addMic)
+
+		//微减
+		sub.addEventListener("click", subMic)
+
+		function addMic(){
+			if(selected == null) return;
+			var val = ++rotate.value
+			rotateVal.innerHTML = val
+			selected.style.transformOrigin= "50% 50%"
+			selected.style.transform = "rotate("+val+"deg)"
+		}
+
+		function subMic(){
+			if(selected == null) return;
+			if(rotate.value == 0) return
+			var val = --rotate.value
+			rotateVal.innerHTML = val
+			//console.log(val)
+			selected.style.transformOrigin= "50% 50%"
+			selected.style.transform = "rotate("+val+"deg)"
+		}
+	</script>
+</body>
+</html>
